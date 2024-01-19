@@ -25,7 +25,7 @@
 					<ul class="menu-burger-nav">
 						<li class="menu-burger-item"><a href="#">Training</a></li>
 						<li class="menu-burger-item"><a href="#">Testing</a></li>
-						<button class="menu-burger-btn">Get started</button>
+						<a href="#test-block">Get started</a>
 					</ul>
 				</div>
 				<header>
@@ -40,7 +40,7 @@
 									<li><a href="">Training</a></li>
 									<li><a href="">Testing</a></li>
 								</ul>
-								<button class="toStart">Get started</button>
+								<a href="#test-block" class="toStart">Get started</a>
 								<img
 									class="burger-menu-icon addActive"
 									src="./public/arrow-left.png"
@@ -111,17 +111,61 @@
 				<div id="information" class="information">
 					<div class="container">
 						<div class="information-inner">
-							<div class="header-img">
+							<div class="header-img element-animation">
 								<img src="./public/info-img.jpg" alt="" />
 							</div>
-
-							<h3 class="header-info-txt">
-								A typing speed test is an online tool designed to measure the
-								ability to type quickly and accurately on a keyboard. The user
-								inputs sentences, and the system calculates the typing speed. It
-								serves not only as a means to assess performance but also as an
-								effective training tool for improving typing skills.
-							</h3>
+							<div>
+								<h3 class="header-info-txt element-animation">
+									A typing speed test is an online tool designed to measure the
+									ability to type quickly and accurately on a keyboard. The user
+									inputs sentences, and the system calculates the typing speed.
+									It serves not only as a means to assess performance but also
+									as an effective training tool for improving typing skills.
+								</h3>
+								<button class="header-info-btn element-animation">
+									Get started
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section>
+				<div id="test-block" class="test-block">
+					<div class="container">
+						<div class="test-block-inner">
+							<div class="test-block-left">
+								<h2 class="test-block-title">-Print speed test-</h2>
+								<h3 class="test-block-subtitle">
+									Take the test in 1 minute and find out how fast you type.
+								</h3>
+								<div class="txt"></div>
+								<button class="start-test">Click here to get started</button>
+							</div>
+							<div class="test-block-right none">
+								<div class="result">
+									<h2 class="result-title">Well done!</h2>
+									<div class="res-info">
+										<div class="res-info-block">
+											<h4>Speed</h4>
+											<div class="speed-res">
+												<img src="./public/speed-icon.png" alt="" />
+												<h3 class="res"><span>183</span>zn/m</h3>
+											</div>
+										</div>
+										<div class="res-info-block">
+											<h4>accuracy</h4>
+											<div class="speed-res">
+												<img src="./public/accuracy-icon.png" alt="" />
+												<h3 class="res"><span>183</span>%</h3>
+											</div>
+										</div>
+									</div>
+									<button class="repeat">
+										<img src="./public/repeat.png" alt="" />
+									</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

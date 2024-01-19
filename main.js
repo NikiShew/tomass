@@ -1,3 +1,10 @@
+let changeThemeElements = [
+	'header-nav',
+	'header-content',
+	'main',
+	'light-dark-theme',
+]
+
 //--плавная прокрутка
 
 document.querySelectorAll('a').forEach(elem => {
@@ -74,32 +81,27 @@ function writeHeaderTitle() {
 	}
 }
 
-// let lol = headerTitle.children
-// for (let i = 0; i < lol.length; i++) {
-// 	console.log(lol[i])
-// }
-
+let arges = [bigElements, aveElements, smallElement]
 window.onload = () => {
-	bigElements.forEach(elem => {
-		setTimeout(() => {
-			elem.style.opacity = 1
-		}, getRandomInt(100, 500))
-	})
-	aveElements.forEach(elem => {
-		setTimeout(() => {
-			elem.style.opacity = 1
-		}, getRandomInt(100, 500))
-	})
-	smallElement.forEach(elem => {
-		setTimeout(() => {
-			elem.style.opacity = 1
-		}, getRandomInt(100, 500))
+	arges.forEach(elem => {
+		elem.forEach(el => {
+			setTimeout(() => {
+				el.style.opacity = 1
+			}, getRandomInt(100, 500))
+		})
 	})
 
 	setTimeout(() => {
 		headerSubText.style.opacity = 1
 	}, getRandomInt(100, 500))
 	writeHeaderTitle()
+
+	if (localStorage.getItem('theme') == 'dark') {
+		for (let i = 0; i < changeThemeElements.length; i++) {
+			let elem = document.querySelector(`.${changeThemeElements[i]}`)
+			elem.classList.add('dark_theme')
+		}
+	}
 }
 
 // функция для генерации рандомных чисел
@@ -148,17 +150,126 @@ burgerBtn.addEventListener('click', () => {
 
 //header-nav header-content main dark_theme light-dark-theme
 //Смена темы
-let changeThemeElements = [
-	'header-nav',
-	'header-content',
-	'main',
-	'light-dark-theme',
-]
-let changeThemeBtn = document.querySelector('.light-dark-theme')
 
+let changeThemeBtn = document.querySelector('.light-dark-theme')
+if (localStorage.getItem('theme') == 'dark') {
+	for (let i = 0; i < changeThemeElements.length; i++) {
+		let elem = document.querySelector(`.${changeThemeElements[i]}`)
+		elem.classList.add('dark_theme')
+	}
+}
 changeThemeBtn.addEventListener('click', () => {
 	for (let i = 0; i < changeThemeElements.length; i++) {
 		let docElem = document.querySelector(`.${changeThemeElements[i]}`)
-		docElem.classList.toggle('dark_theme')
+		// docElem.classList.toggle('dark_theme')
+		docElem.classList.contains('dark_theme') ? light() : dark()
+
+		function dark() {
+			localStorage.setItem('theme', 'dark')
+			docElem.classList.add('dark_theme')
+		}
+		function light() {
+			localStorage.setItem('theme', 'light')
+			docElem.classList.remove('dark_theme')
+		}
 	}
 })
+
+// Появления элементов при скролле
+function onEntry(entry) {
+	entry.forEach(change => {
+		if (change.isIntersecting) {
+			change.target.classList.add('element-show')
+		}
+	})
+}
+
+let options = {
+	threshold: [0.5],
+}
+let observer = new IntersectionObserver(onEntry, options)
+let elements = document.querySelectorAll('.element-animation')
+
+for (let elm of elements) {
+	observer.observe(elm)
+}
+
+//click function
+// let obj = {
+// 	',': 'koma',
+// 	'.': 'point',
+// 	' ': 'space',
+// 	'-': 'minus',
+// 	'+': 'plus',
+// 	'=': 'plus',
+// 	'`': 'volna',
+// 	'/': 'slash',
+// 	"'": 'skr',
+// 	';': 'twoPoint',
+// }
+let text = 'Ulo bebg'
+let txt = document.querySelector('.txt')
+let rightBlock = document.querySelector('.test-block-right')
+
+function vivod() {
+	let splited = text.split('').map(elem => {
+		return `<span>${elem}</span>`
+	})
+	txt.innerHTML = splited.join('')
+}
+vivod()
+
+let startBtn = document.querySelector('.start-test')
+startBtn.addEventListener('click', oru)
+
+function finish() {
+	txt.style.background = 'rgba(236, 233, 233, 0.347)'
+	rightBlock.classList.remove('none')
+	vivod()
+}
+
+// function oru() {
+// 	// txt.style.background = 'gray'
+// 	rightBlock.classList.add('none')
+// 	let lol = 0
+
+// 	function perebor() {
+// 		window.onkeydown = e => {
+// 			console.log(e.key + ' : ' + txt.children[lol].innerHTML)
+// 			if (txt.children[lol] && e.key === txt.children[lol].innerHTML) {
+// 				let currentElement = txt.children[lol]
+// 				++lol
+
+// 				perebor()
+// 				currentElement.classList.add('color')
+// 				// console.log(e.key + ' : ' + currentElement.textContent)
+// 				if (lol === txt.children.length) {
+// 					finish()
+// 				}
+// 			}
+// 		}
+// 	}
+// 	perebor()
+// }
+
+let iterator = 0
+
+function oru() {
+	window.addEventListener('keypress', e => {
+		const expectedSymbol = text[iterator]
+		if (e.key === expectedSymbol) {
+			iterator++
+			rerender()
+		}
+	})
+}
+oru()
+const rerender = () => {
+	for (let i = 0; i < text.length; i++) {
+		txt.children[iterator - 1].classList.add('color')
+		if (iterator === txt.children.length) {
+			console.log('конец')
+		}
+	}
+}
+// rerender()
