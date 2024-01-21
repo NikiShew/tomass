@@ -193,23 +193,21 @@ let elements = document.querySelectorAll('.element-animation')
 for (let elm of elements) {
 	observer.observe(elm)
 }
+let texts = [
+	`In June of 1971, 26 year old Michael Reagan married his 18 year old fiancee in a beautiful ceremony that took place in Hawaii, but which sadly couldnt be attended by his dad, the future President of the United States, Ronald Reagan. A few days before the ceremony, however, Michael did receive something invaluable that would be treasured for years to come: a heartfelt, loving, and sage letter of fatherly advice, on the subject of love and marriage.  “It was straight from Dads heart,” Michael said of the letter in his 2004 book, In the Words of Ronald Reagan, "Honest, old-fashioned, and wise. I cried when I read it, and Ive read it many times in the years since then.`,
+	`Let me not to the marriage of true minds Admit impediments. Love is not love Which alters when it alteration finds, Or bends with the remover to remove: O no! it is an ever-fixed mark That looks on tempests and is never shaken; It is the star to every wandering bark, Whose worth's unknown, although his height be taken.`,
+	`They did occasionally trim split ends or even singe them, but long hair was viewed as being ultra-feminine and desirable. When it comes to long hair, nobody could top the Seven Sutherland Sisters. They became a national sensation in the 1880s because of their hair (37 feet in total) and made a living doing musical performances with their hair down. They capitalized on it even further by producing a line of hair care products and became quite rich. When the 1920s and the bob rolled around, they began to be ridiculed as unfashionable relics of the past and lost the public's eye. `,
+	`"Anytime" and "any time" share the same definition and are located in the same place in the dictionary. Both mean whenever. "Anytime" is the Americanized version of the British "any time". "Any time" is specifically used more when the adverb "at" precedes the word. "Any time" was the original word which was developed in the 18th century and then evolved into anytime over the years. Children in the United States are typically taught the use of "anytime", however, they are also taught the words "any" and "time" as their own entities and that they mean the same things.`,
+]
 
-//click function
-// let obj = {
-// 	',': 'koma',
-// 	'.': 'point',
-// 	' ': 'space',
-// 	'-': 'minus',
-// 	'+': 'plus',
-// 	'=': 'plus',
-// 	'`': 'volna',
-// 	'/': 'slash',
-// 	"'": 'skr',
-// 	';': 'twoPoint',
-// }
-let text = 'Ulo bebg'
+let text = texts[getRandomInt(0, texts.length)]
+
+// let text = `Let me not to the`
+
 let txt = document.querySelector('.txt')
 let rightBlock = document.querySelector('.test-block-right')
+let leftBlock = document.querySelector('.test-block-left')
+let repeatBtn = document.querySelector('.repeat')
 
 function vivod() {
 	let splited = text.split('').map(elem => {
@@ -221,55 +219,126 @@ vivod()
 
 let startBtn = document.querySelector('.start-test')
 startBtn.addEventListener('click', oru)
-
+repeatBtn.addEventListener('click', startFunction)
 function finish() {
-	txt.style.background = 'rgba(236, 233, 233, 0.347)'
+	timeBlock.innerHTML = `60 sec`
+	timerStart = false
 	rightBlock.classList.remove('none')
+	leftBlock.classList.add('none')
+	speedTypes(1)
+	iterator = 0
+	errorSymbols = 0
 	vivod()
 }
 
-// function oru() {
-// 	// txt.style.background = 'gray'
-// 	rightBlock.classList.add('none')
-// 	let lol = 0
-
-// 	function perebor() {
-// 		window.onkeydown = e => {
-// 			console.log(e.key + ' : ' + txt.children[lol].innerHTML)
-// 			if (txt.children[lol] && e.key === txt.children[lol].innerHTML) {
-// 				let currentElement = txt.children[lol]
-// 				++lol
-
-// 				perebor()
-// 				currentElement.classList.add('color')
-// 				// console.log(e.key + ' : ' + currentElement.textContent)
-// 				if (lol === txt.children.length) {
-// 					finish()
-// 				}
-// 			}
-// 		}
-// 	}
-// 	perebor()
-// }
+function startFunction() {
+	leftBlock.classList.remove('none')
+	rightBlock.classList.add('none')
+}
 
 let iterator = 0
+let errorSymbols = 0
+let isTimeOver = false
+let timerStart = false
+function keyPressHandler(e) {
+	if (!isTimeOver) {
+		timeSec(60)
+		timeOut(60000)
+	}
+	const expectedSymbol = text[iterator]
+	if (e.key === expectedSymbol) {
+		iterator++
+		rerender()
+	} else if (e.key !== text[iterator - 1]) {
+		rerenderRed()
+	}
+	console.log(e.key + ' : ' + expectedSymbol)
+}
+let timeBlock = document.querySelector('.time')
 
 function oru() {
-	window.addEventListener('keypress', e => {
-		const expectedSymbol = text[iterator]
-		if (e.key === expectedSymbol) {
-			iterator++
-			rerender()
-		}
-	})
+	timerStart = true
+
+	startFunction()
+	window.addEventListener('keypress', keyPressHandler)
 }
-oru()
+
+function timeOut(sek) {
+	setTimeout(() => {
+		window.removeEventListener('keypress', keyPressHandler)
+		finish()
+	}, sek)
+}
+
 const rerender = () => {
 	for (let i = 0; i < text.length; i++) {
+		txt.children[iterator - 1].classList.remove('colorRed')
 		txt.children[iterator - 1].classList.add('color')
-		if (iterator === txt.children.length) {
-			console.log('конец')
-		}
+	}
+
+	if (iterator === txt.children.length) {
+		// window.removeEventListener('keypress', keyPressHandler)
+		txt.children[iterator - 1].classList.remove('colorRed')
+		finish()
 	}
 }
-// rerender()
+
+function rerenderRed() {
+	txt.children[iterator].classList.add('colorRed')
+	errorSymbols++
+}
+
+//вывод остатка времени
+// let timeBlock = document.querySelector('.time')
+function timeSec(sec) {
+	isTimeOver = true
+	let interval = setInterval(() => {
+		timeBlock.innerHTML = `${sec} sec`
+		--sec
+		// console.log(sec)
+		// console.log('timer')
+
+		if (sec == 0) {
+			clearInterval(interval)
+			isTimeOver = false
+		}
+	}, 1000)
+}
+
+function speedTypes(min) {
+	//вывод результа скорости печати
+	let resBlock = document.querySelector('.res')
+	let accuracyBlock = document.querySelector('.accuracy')
+	//количество символов делим на 5 символов на слово
+	let words = iterator / 5
+
+	let goodWSymbol = iterator - errorSymbols
+
+	//результат делим на количество минут
+	let res = words / min
+
+	let accuracy = (goodWSymbol / iterator) * 100
+
+	resBlock.innerHTML = `<span>${Math.round(res)}</span> zn/m`
+	accuracyBlock.innerHTML = `<span>${Math.round(accuracy)}</span> %`
+}
+
+const windowOuterWidth = window.innerWidth
+// window.onresize(() => {
+// 	if (windowOuterWidth <= 1500) {
+// 		txt.innerText = 'Sorry, but this function is only for computer devices.'
+// 		startBtn.style.display = 'none'
+// 	}
+// })
+
+window.addEventListener('resize', e => {
+	const windowOuterWidth = window.innerWidth
+	console.log(windowOuterWidth)
+	if (windowOuterWidth <= 1500) {
+		txt.innerText = 'Sorry, but this function is only for computer devices.'
+		startBtn.style.display = 'none'
+	} else {
+		vivod()
+		startBtn.style.display = ''
+	}
+})
