@@ -193,6 +193,8 @@ let elements = document.querySelectorAll('.element-animation')
 for (let elm of elements) {
 	observer.observe(elm)
 }
+
+//тест на скорость печати
 let texts = [
 	`In June of 1971, 26 year old Michael Reagan married his 18 year old fiancee in a beautiful ceremony that took place in Hawaii, but which sadly couldnt be attended by his dad, the future President of the United States, Ronald Reagan. A few days before the ceremony, however, Michael did receive something invaluable that would be treasured for years to come: a heartfelt, loving, and sage letter of fatherly advice, on the subject of love and marriage.  “It was straight from Dads heart,” Michael said of the letter in his 2004 book, In the Words of Ronald Reagan, "Honest, old-fashioned, and wise. I cried when I read it, and Ive read it many times in the years since then.`,
 	`Let me not to the marriage of true minds Admit impediments. Love is not love Which alters when it alteration finds, Or bends with the remover to remove: O no! it is an ever-fixed mark That looks on tempests and is never shaken; It is the star to every wandering bark, Whose worth's unknown, although his height be taken.`,
@@ -221,6 +223,7 @@ let startBtn = document.querySelector('.start-test')
 startBtn.addEventListener('click', oru)
 repeatBtn.addEventListener('click', startFunction)
 function finish() {
+	text = texts[getRandomInt(0, texts.length)]
 	timeBlock.innerHTML = `60 sec`
 	timerStart = false
 	rightBlock.classList.remove('none')
@@ -323,22 +326,45 @@ function speedTypes(min) {
 	accuracyBlock.innerHTML = `<span>${Math.round(accuracy)}</span> %`
 }
 
-const windowOuterWidth = window.innerWidth
-// window.onresize(() => {
-// 	if (windowOuterWidth <= 1500) {
-// 		txt.innerText = 'Sorry, but this function is only for computer devices.'
-// 		startBtn.style.display = 'none'
-// 	}
-// })
-
 window.addEventListener('resize', e => {
 	const windowOuterWidth = window.innerWidth
-	console.log(windowOuterWidth)
+	const windowOuterHeight = window.innerHeight
+	let headerInfo = document.querySelector('.header-info')
+	console.log(windowOuterHeight)
 	if (windowOuterWidth <= 1500) {
 		txt.innerText = 'Sorry, but this function is only for computer devices.'
 		startBtn.style.display = 'none'
+		timeBlock.style.display = 'none'
 	} else {
 		vivod()
 		startBtn.style.display = ''
+		timeBlock.style.display = ''
+	}
+
+	if (windowOuterHeight <= 500) {
+		headerTitle.style.fontSize = `4rem`
+		headerInfo.style.paddingTop = '5%'
+	} else {
+		headerTitle.style.fontSize = `6rem`
+		headerInfo.style.paddingTop = '15%'
+	}
+})
+
+//scroll Top
+
+let scrollTopBtn = document.querySelector('.scrollTop')
+scrollTopBtn.addEventListener('click', () => {
+	window.scrollTo({
+		top: 0,
+		behavior: 'smooth',
+	})
+})
+
+window.addEventListener('scroll', () => {
+	let scrolledAmountDown = window.scrollY
+	if (scrolledAmountDown >= 300) {
+		scrollTopBtn.classList.remove('none')
+	} else {
+		scrollTopBtn.classList.add('none')
 	}
 })
